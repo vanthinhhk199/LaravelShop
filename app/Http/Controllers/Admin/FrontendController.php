@@ -12,3 +12,10 @@ class FrontendController extends Controller
         return view('admin.index');
     }
 }
+f sdf
+
+fd's
+ds f
+ds
+f sd
+f
