@@ -1,0 +1,96 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+.ct-gt{
+    height: 100px;
+}
+.img-prod{
+    padding: 40px;
+}
+.text-black{
+    color: black;
+}
+
+/* rating */
+.rating-css div {
+    color: #ffe400;
+    font-size: 30px;
+    font-family: sans-serif;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 20px 0;
+  }
+  .rating-css input {
+    display: none;
+  }
+  .rating-css input + label {
+    font-size: 50px;
+    text-shadow: 1px 1px 0 #8f8420;
+    cursor: pointer;
+  }
+  .rating-css input:checked + label ~ label {
+    color: #b4afaf;
+  }
+  .rating-css label:active {
+    transform: scale(0.8);
+    transition: 0.3s ease;
+
+  }
+
+/* End of Star Rating */
+
+.paginationWrap{
+    display: flex;
+    justify-content: center;
+}
+
+.auth-ln{
+  display: block;
+}
+.auth-rr{
+  display: block;
+
+}
+.a-logout{
+  margin-left: -24px;
+}
+.navbar-nav .prop-lg{
+  border: none;
+  background-color: #3d464d;
+  color: #fff;
+}
+.prop-lg .dropdown-item:hover{
+  background-color: #3d464d;
+}
+.clr-lg:hover{
+  text-decoration: none;
+}
+.cart-wl {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cart-wl-h{
+  display: flex;
+  align-items: center;
+}
+.dropdown-menu .grp-lg:hover{
+  background-color: white;
+  color: #ffe400;
+}
+.dropdown-menu a:hover{
+  text-decoration: none;
+  color: #ffe400;
+  background-color: #fff;
+}
+.dropdown-menu a{
+  text-decoration: none;
+  color: black;
+}
+
+@media screen and (min-width: 991px){
+    #rp-login{
+      display: none;
+    }
+}
