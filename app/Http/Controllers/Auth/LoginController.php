@@ -9,25 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
     use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    // protected
 
     protected function authenticated()
     {
@@ -37,6 +20,9 @@ class LoginController extends Controller
         }
         elseif(Auth::user()->role_as == '0') // Normal or Default User Login
         {
+            if (Auth::user()->email_verified_at == ''){
+                return redirect('/email/verify')->with('status','Please verify your email first');
+            }
             return redirect('/')->with('status','Logged in successfully');
         }
     }

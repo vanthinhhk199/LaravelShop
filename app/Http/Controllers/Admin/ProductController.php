@@ -43,7 +43,7 @@ class ProductController extends Controller
                 'meta_keywords'=>' required |string | max:191',
                 'meta_description'=>' required |string | max:191',
                 'image'=>['required'],
-    
+
             ], [
                 'cate_id.required' => 'Vui lòng chọn Category',
                 'name.required' => 'Vui lòng nhập Name',
@@ -64,13 +64,13 @@ class ProductController extends Controller
                 'meta_keywords.required' => 'Vui lòng nhập Meta Keywords',
                 'meta_description.required' => 'Vui lòng nhập Meta Description',
                 'image.required' => 'Vui lòng nhập File image',
-    
+
             ]);
-            
+
             if ($validator->fails()) {
                 return redirect('add-products')->withErrors($validator)->withInput();
             }else{
-                
+
                 $products = new Product();
                 if($request->hasFile('image')){
 
@@ -138,7 +138,7 @@ class ProductController extends Controller
             $products->meta_description = $request->input('meta_description');
             $products->update();
             return redirect('products')->with('status',"Products Updated Successfully");
-            
+
         } catch (\Exception $e) {
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
         }

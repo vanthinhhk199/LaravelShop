@@ -10,92 +10,162 @@ use Error;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class CartController extends Controller
 {
     public function addProduct(Request $request)
     {
-        try {
-            $product_id = $request->input('product_id');
-            $product_qty = $request->input('product_qty');
-    
-            if(Auth::check()){
-    
-                $prod_check = Product::where('id', $product_id)->first();
-    
-                if($prod_check){
-    
-                    if (Cart::where('prod_id',$product_id)->where('user_id',Auth::id())->exists()) {
-    
-                        return response()->json(['status' => $prod_check->name." ( Sản phẩm đã tồn tại trong giỏ hàng )", 'success' => false]);
-                    }else{
-    
-                        $cartItem = new Cart();
-                        $cartItem->prod_id = $product_id;
-                        $cartItem->user_id = Auth::id();;
-                        $cartItem->prod_qty = $product_qty;
-                        $cartItem->save();
-                        return response()->json(['status' => $prod_check->name." ( Thêm sản phẩm thành công )", 'success' => true]);
+        $prod_id = $request->input('prod_id');
+        $prod_qty = $request->input('prod_qty');
 
-                    }
+        if(Cookie::get('shopping_cart'))
+        {
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            return $cart_data;
+        }
+        else
+        {
+            $cart_data = array();
+        }
+
+        $item_id_list = array_column($cart_data, 'item_id');
+        $prod_id_is_there = $prod_id;
+
+        if(in_array($prod_id_is_there, $item_id_list))
+        {
+            foreach($cart_data as $keys => $values)
+            {
+                if($cart_data[$keys]["item_id"] == $prod_id)
+                {
+                    $cart_data[$keys]["item_quantity"] += $prod_qty;
+                    $item_data = json_encode($cart_data);
+                    $minutes = 60;
+                    Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                    return response()->json(['status'=>'"'.$cart_data[$keys]["item_name"].'" Already Added to Cart']);
                 }
-            }else{
-                return response()->json(['status' => "Login to Continue"]);
             }
-        } catch (\Exception $e) {
-            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
+        }
+        else {
+            $products = Product::find($prod_id);
+            $prod_name = $products->name;
+            $prod_image = $products->image;
+            $price = $products->selling_price;
+
+            if ($products) {
+                $item_array = array(
+                    'item_id' => $prod_id,
+                    'item_name' => $prod_name,
+                    'item_quantity' => $prod_qty,
+                    'item_price' => $price,
+                    'item_image' => $prod_image
+                );
+                $cart_data[] = $item_array;
+
+                $item_data = json_encode($cart_data);
+                $minutes = 60;
+                Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                return response()->json(['status' => '"' . $prod_name . '" Added to Cart']);
+            }
+        }
+    }
+
+    public function cartloadbyajax()
+    {
+        if(Cookie::get('shopping_cart'))
+        {
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            $totalcart = count($cart_data);
+
+            echo json_encode(array('totalcart' => $totalcart)); die;
+            return;
+        }
+        else
+        {
+            $totalcart = "0";
+            echo json_encode(array('totalcart' => $totalcart)); die;
+            return;
         }
     }
 
     public function viewcart()
     {
-        try {
-            $categories = Category::all();
-            $cartitems = Cart::where('user_id', Auth::id())->get();
-            return view('frontend.cart', compact('cartitems', 'categories'));
-        } catch (\Exception $e) {
-            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
-        }
+        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+        $cart_data = json_decode($cookie_data, true);
+        return view('frontend.cart')
+            ->with('cart_data',$cart_data);
     }
-    public function updatecart(Request $request){
 
-        $prod_id = $request->input('prod_id');
-        $product_qty = $request->input('prod_qty');
+    public function updatetocart(Request $request)
+    {
+        $prod_id = $request->input('product_id');
+        $quantity = $request->input('quantity');
 
-        if(Auth::check()){
+        if(Cookie::get('shopping_cart'))
+        {
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
 
-            if(Cart::where('prod_id', $prod_id)->where('user_id',Auth::id())->exists()){
+            $item_id_list = array_column($cart_data, 'item_id');
+            $prod_id_is_there = $prod_id;
 
-                $cart = Cart::where('prod_id', $prod_id)->where('user_id',Auth::id())->first();
-                $cart->prod_qty = $product_qty;
-                $cart->update();
-                return response()->json(['status' => "Quantity updated"]);
+            if(in_array($prod_id_is_there, $item_id_list))
+            {
+                foreach($cart_data as $keys => $values)
+                {
+                    if($cart_data[$keys]["item_id"] == $prod_id)
+                    {
+                        $cart_data[$keys]["item_quantity"] =  $quantity;
+                        $ttprice = ($cart_data[$keys]["item_price"] * $quantity);
+                        $grandtotalprice = number_format($ttprice);
+                        $item_data = json_encode($cart_data);
+                        $minutes = 60;
+                        Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                        return response()->json([
+                            'status'=>'"'.$cart_data[$keys]["item_name"].'" Quantity Updated',
+                            'gtprice'=>''.$grandtotalprice.''
+
+                        ]);
+                    }
+                }
             }
-        }else{
-
-            return response()->json(['status' => "Login to Continue"]);
-
         }
     }
 
-    public function deleteproduct(Request $request){
+    public function deletefromcart(Request $request)
+    {
+        $prod_id = $request->input('product_id');
 
-        if(Auth::check()){
+        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+        $cart_data = json_decode($cookie_data, true);
 
-            $prod_id = $request->input('prod_id');
-            if(Cart::where('prod_id', $prod_id)->where('user_id',Auth::id())->exists()){
-                $cartItem = Cart::where('prod_id', $prod_id)->where('user_id',Auth::id())->first();
-                $cartItem->delete();
-                return response()->json(['status' => "Product Delete to Successfully"]);
+        $item_id_list = array_column($cart_data, 'item_id');
+        $prod_id_is_there = $prod_id;
 
+        if(in_array($prod_id_is_there, $item_id_list))
+        {
+            foreach($cart_data as $keys => $values)
+            {
+                if($cart_data[$keys]["item_id"] == $prod_id)
+                {
+                    unset($cart_data[$keys]);
+                    $item_data = json_encode($cart_data);
+                    $minutes = 60;
+                    Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                    return response()->json(['status'=>'Item Removed from Cart']);
+                }
             }
-
-        }else{
-
-            return response()->json(['status' => "Login to Continue"]);
-
         }
     }
+
+    public function clearcart()
+    {
+        Cookie::queue(Cookie::forget('shopping_cart'));
+        return response()->json(['status'=>'Your Cart is Cleared']);
+    }
+
 
     public function cartcount()
     {

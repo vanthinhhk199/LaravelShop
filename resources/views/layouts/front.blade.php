@@ -36,6 +36,9 @@
      <!-- Customized Bootstrap Stylesheet -->
      <link href="{{ asset('frontend/css/style_custom.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('frontend/css/alertify.min.css') }}" rel="stylesheet">
+
+
 
 
 </head>
@@ -64,6 +67,9 @@
     <script src="{{ asset('frontend/js/custom.js') }}"></script>
 
     <script src="{{ asset('frontend/js/sweetalert.min.js') }}"></script>
+
+    <script src="{{ asset('frontend/js/alertify.min.js') }}"></script>
+
 
     {{-- ---------------------------------------}}
 
