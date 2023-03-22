@@ -9,7 +9,6 @@ use App\Models\Rating;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Nette\Utils\ArrayList;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -17,6 +16,7 @@ class FrontendController extends Controller
 {
     public function index()
     {
+        // $featured_products = Product::where('trending', '1')->paginate(8);
         try {
             $featured_products = Product::where('trending', '1')
             ->leftjoin('ratings', 'products.id', '=', 'ratings.prod_id')
@@ -81,7 +81,7 @@ class FrontendController extends Controller
             }
 
             return view('frontend.index', compact('featured_products', 'categories'));
-
+            
         } catch (\Exception $e) {
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
         }
@@ -95,7 +95,7 @@ class FrontendController extends Controller
                 $categories = Category::all();
                 $category = Category::where('id',$id)->first();
                 $products = Product::where('cate_id', $category->id)->where('status','0')->get();
-
+    
                 return view('frontend.products.index', compact('category','products', 'categories'));
             }else {
                 return redirect('/')->with('status',"Slug doesnot exists");
@@ -119,7 +119,7 @@ class FrontendController extends Controller
                 $reviews = Review::where('prod_id', $products->id)->orderBy('created_at', 'desc')->paginate(2);
                 $review = Review::all();
                 if ($ratings->count() > 0) {
-
+    
                     $rating_value = $rating_sum/$ratings->count();
                 }else{
                     $rating_value = 0;
@@ -140,7 +140,7 @@ class FrontendController extends Controller
                 $categories = Category::all();
                 $searchProduct = Product::where("name","LIKE","%$request->search%")->latest()->paginate(8);
                 foreach ($searchProduct as $prod) {
-
+    
                     $ratings = Rating::where('prod_id', $prod->id)->get();
                     $rating_sum = Rating::where('prod_id', $prod->id)->sum('stars_rated');
                     if ($ratings->count() != 0) {

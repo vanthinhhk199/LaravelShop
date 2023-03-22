@@ -119,10 +119,10 @@
                     <p class="mb-4">{{ $products->small_description }}</p>
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <input type="hidden" value="{{ $products->id }}" class="prod_id">
-                        <div class="input-group text-center mr-3 product_data" style="width: 130px">
-                            <button class="btn btn-primary decrement-btn">-</button>
-                            <input class="form-control qty-input text-center" readonly="readonly" type="text" name="quantity"  value="1">
-                            <button class="btn btn-primary increment-btn">+</button>
+                        <div class="input-group text-center mr-3" style="width: 130px">
+                            <button class="btn btn-primary changeQuantity decrement-btn">-</button>
+                            <input type="text" name="quantity" class="form-control qty-input text-center" value="1">
+                            <button class="btn btn-primary changeQuantity increment-btn">+</button>
                         </div>
                         @if ($products->qty > 0)
                             <button class="btn btn-primary addToCartBtn px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
