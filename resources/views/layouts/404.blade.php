@@ -4,9 +4,9 @@
   <span><span class="screen-reader-text">0</span></span>
   <span>4</span><br>
   <span style="font-size: 50px">
-      {{-- @if(isset($error))
-          <p>{{ $error }}</p>
-      @endif --}}
+{{--      @if(isset($error))--}}
+{{--          <p>{{ $error }}</p>--}}
+{{--      @endif--}}
       <a style="color: rgb(248, 250, 152); " href="/">Quay lại trang chủ</a>
   </span>
 </section>
@@ -54,7 +54,7 @@
     border-radius: 999px;
         box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
                     inset 0 30px 0 rgba(239, 250, 180, 0.4),
-                    inset -30px 0 0 rgba(255, 196, 140, 0.4),	
+                    inset -30px 0 0 rgba(255, 196, 140, 0.4),
                     inset 0 -30px 0 rgba(245, 105, 145, 0.4);
     animation: shadowsdancing 4s infinite;
     }
@@ -73,31 +73,31 @@
     0% {
         box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
                     inset 0 30px 0 rgba(239, 250, 180, 0.4),
-                    inset -30px 0 0 rgba(255, 196, 140, 0.4),	
+                    inset -30px 0 0 rgba(255, 196, 140, 0.4),
                     inset 0 -30px 0 rgba(245, 105, 145, 0.4);
     }
     25% {
         box-shadow: inset 30px 0 0 rgba(245, 105, 145, 0.4),
                     inset 0 30px 0 rgba(209, 242, 165, 0.4),
-                    inset -30px 0 0 rgba(239, 250, 180, 0.4),	
+                    inset -30px 0 0 rgba(239, 250, 180, 0.4),
                     inset 0 -30px 0 rgba(255, 196, 140, 0.4);
     }
     50% {
         box-shadow: inset 30px 0 0 rgba(255, 196, 140, 0.4),
                     inset 0 30px 0 rgba(245, 105, 145, 0.4),
-                    inset -30px 0 0 rgba(209, 242, 165, 0.4),	
+                    inset -30px 0 0 rgba(209, 242, 165, 0.4),
                     inset 0 -30px 0 rgba(239, 250, 180, 0.4);
     }
     75% {
     box-shadow: inset 30px 0 0 rgba(239, 250, 180, 0.4),
                     inset 0 30px 0 rgba(255, 196, 140, 0.4),
-                    inset -30px 0 0 rgba(245, 105, 145, 0.4),	
+                    inset -30px 0 0 rgba(245, 105, 145, 0.4),
                     inset 0 -30px 0 rgba(209, 242, 165, 0.4);
     }
     100% {
         box-shadow: inset 30px 0 0 rgba(209, 242, 165, 0.4),
                     inset 0 30px 0 rgba(239, 250, 180, 0.4),
-                    inset -30px 0 0 rgba(255, 196, 140, 0.4),	
+                    inset -30px 0 0 rgba(255, 196, 140, 0.4),
                     inset 0 -30px 0 rgba(245, 105, 145, 0.4);
     }
     }
@@ -154,7 +154,7 @@
     text-align: center;
     margin: 30px 15px;
     }
-    .zoom-area { 
+    .zoom-area {
     max-width: 490px;
     margin: 30px auto 30px;
     font-size: 19px;

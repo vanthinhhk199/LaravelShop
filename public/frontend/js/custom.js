@@ -24,7 +24,7 @@ $(document).ready(function () {
                 $('.basket-item-count').html('');
                 var parsed = jQuery.parseJSON(response)
                 var value = parsed;
-                $('.basket-item-count').append($('<span class="badge text-secondary border border-secondary rounded-circle basket-item-count" style="padding-bottom: 2px;">'+ value['totalcart'] +'</span>'));
+                $('.basket-item-count').append($('<span class="badge text-secondary border border-secondary rounded-circle basket-item-count" style="padding-bottom: 2px;">'+ value['totalcart'] + '</span>'));
             }
         });
     }
@@ -110,12 +110,16 @@ $(document).ready(function () {
             value--;
             $(this).parents('.product_data').find('.qty-input').val(value);
         }
+        if(value=1){
+            alertify.set('notifier','position','top-right');
+            alertify.success('Số lượng đã tối thiểu');
+        }
         checkInputValue();
     });
 
     function checkInputValue() {
         var input = document.getElementById("myInput");
-        if (input.value < 1) {
+        if (typeof input !== 'undefined' && input !== null && input.value < 1) {
             input.value = 1;
         }
     }
@@ -149,8 +153,8 @@ $(document).ready(function () {
     $('.delete_cart_data').click(function (e) {
         e.preventDefault();
 
+        var thisDelete = $(this);
         var product_id = $(this).closest(".cartpage").find('.product_id').val();
-
         var data = {
             '_token': $('input[name=_token]').val(),
             "product_id": product_id,
@@ -160,10 +164,15 @@ $(document).ready(function () {
 
         $.ajax({
             url: '/delete-from-cart',
-            type: 'DELETE',
+            method: 'DELETE',
             data: data,
             success: function (response) {
-                window.location.reload();
+                // window.location.reload();
+                thisDelete.closest(".cartpage").remove();
+                $('#totalajaxcall').load(location.href + ' .totalpricingload');
+                cartload();
+                alertify.set('notifier','position','top-right');
+                alertify.success(response.status);
             }
         });
     });

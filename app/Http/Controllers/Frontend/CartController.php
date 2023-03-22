@@ -19,11 +19,17 @@ class CartController extends Controller
         $prod_id = $request->input('prod_id');
         $prod_qty = $request->input('prod_qty');
 
+        if ($prod_qty <= 0){
+            return response()->json(['status' => 'Số lượng sản phẩm không thể âm']);
+        }
+        if ($prod_qty > 10){
+            return response()->json(['status' => 'Số lượng sản phẩm không thể lớn hơn 10']);
+        }
+
         if(Cookie::get('shopping_cart'))
         {
             $cookie_data = stripslashes(Cookie::get('shopping_cart'));
             $cart_data = json_decode($cookie_data, true);
-            return $cart_data;
         }
         else
         {

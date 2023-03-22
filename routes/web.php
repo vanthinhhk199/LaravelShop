@@ -40,11 +40,11 @@ Route::get('load-cart-data', [CartController::class, 'cartloadbyajax']);
 Route::get('load-wishlist-count', [WishlistController::class, 'wishlistcount']);
 
 Route::post('add-to-cart', [CartController::class, 'addProduct']);
-Route::post('delete-from-cart', [CartController::class, 'deletefromcart']);
+Route::delete('delete-from-cart', [CartController::class, 'deletefromcart']);
 Route::post('update-to-cart', [CartController::class, 'updatetocart']);
 
 Route::post('add-to-wishlist', [WishlistController::class, 'add']);
-Route::post('remove-wishlist-item', [WishlistController::class, 'deleteitem']);
+Route::delete('remove-wishlist-item', [WishlistController::class, 'deleteitem']);
 
 Route::get('cart', [CartController::class, 'viewcart']);
 
@@ -72,14 +72,14 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
     Route::post('insert-category', 'Admin\CategoryController@insert');
     Route::get('edit-category/{id}', [CategoryController::class, 'edit']);
     Route::put('update-category/{id}', [CategoryController::class, 'update']);
-    Route::get('delete-category/{id}', [CategoryController::class, 'destroy']);
+    Route::delete('delete-category/{id}', [CategoryController::class, 'destroy']);
 
     Route::get('products', [ProductController::class, 'index']);
     Route::get('add-products', [ProductController::class, 'add']);
     Route::post('insert-product', [ProductController::class, 'insert']);
     Route::get('edit-products/{id}', [ProductController::class, 'edit']);
     Route::put('update-products/{id}', [ProductController::class, 'update']);
-    Route::get('delete-products/{id}', [ProductController::class, 'destroy']);
+    Route::delete('delete-products/{id}', [ProductController::class, 'destroy']);
 
 
     Route::get('orders', [OrderController::class, 'index']);

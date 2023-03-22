@@ -27,7 +27,6 @@
                     @php $total= 0; @endphp
                     @if(isset($cart_data))
                         @if(Cookie::get('shopping_cart'))
-
                             <table class="table table-light table-borderless table-hover text-center mb-0">
                                 <thead class="thead-dark">
                                 <th>
@@ -38,7 +37,7 @@
                                 <th>Remove</th>
                                 </tr>
                                 </thead>
-                                <tbody class="">
+                                <tbody>
                                 @foreach ($cart_data as $data)
                                     <tr class="cartpage">
                                         <td class="d-flex">
@@ -60,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="align-middle cart-grand-total-price">{{ $data['item_quantity'] * $data['item_price'] }} $</td>
+                                        <td class="align-middle cart-grand-total-price">{{ $data['item_quantity'] * $data['item_price'] }}</td>
                                         <td class="align-middle"><button class="btn btn-sm btn-danger delete_cart_data"><i class="fa fa-times"></i></button></td>
                                     </tr>
                                     @php
