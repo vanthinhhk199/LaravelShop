@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\RatingController;
 use App\Http\Controllers\Frontend\ReviewController;
 use App\Http\Controllers\Frontend\UserController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -35,18 +36,21 @@ Route::get('product/{id}', [FrontendController::class, 'productview']);
 
 Route::get('search', [FrontendController::class, 'searchProduct']);
 
-Route::get('load-cart-data', [CartController::class, 'cartcount']);
+Route::get('load-cart-data', [CartController::class, 'cartloadbyajax']);
 Route::get('load-wishlist-count', [WishlistController::class, 'wishlistcount']);
 
 Route::post('add-to-cart', [CartController::class, 'addProduct']);
-Route::post('delete-cart-data', [CartController::class, 'deleteproduct']);
-Route::post('update-cart', [CartController::class, 'updatecart']);
+Route::post('delete-from-cart', [CartController::class, 'deletefromcart']);
+Route::post('update-to-cart', [CartController::class, 'updatetocart']);
 
 Route::post('add-to-wishlist', [WishlistController::class, 'add']);
 Route::post('remove-wishlist-item', [WishlistController::class, 'deleteitem']);
 
+Route::get('cart', [CartController::class, 'viewcart']);
+
+Route::get('clear-cart',[CartController::class, 'clearcart']);
+
 Route::middleware(['auth'])->group(function(){
-    Route::get('cart', [CartController::class, 'viewcart']);
     Route::get('checkout', [CheckoutController::class, 'index']);
     Route::post('place-order', [CheckoutController::class, 'placeorder']);
 
