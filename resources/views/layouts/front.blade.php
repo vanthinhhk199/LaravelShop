@@ -53,25 +53,15 @@
 
 <!-- JavaScript Libraries -->
 <script src="{{ asset('frontend/js/jquery-3.4.1.min.js') }}"></script>
-
-<script src="{{ asset('frontend/js/easing.min.js') }}"></script>
-
-<script src="{{ asset('frontend/js/owl.carousel.min.js') }}"></script>
-
-<script src="{{ asset('frontend/js/contact.js') }}"></script>
-
-<script src="{{ asset('frontend/js/main.js') }}"></script>
-
-<script src="{{ asset('frontend/js/custom.js') }}"></script>
-
-<script src="{{ asset('frontend/js/sweetalert.min.js') }}"></script>
-
-<script src="{{ asset('frontend/js/alertify.min.js') }}"></script>
-
-<script src="{{ asset('frontend/js/jqBootstrapValidation.min.js') }}"></script>
-
 <script src="{{ asset('frontend/js/bootstrap.bundle.min.js') }}"></script>
-
+<script src="{{ asset('frontend/js/easing.min.js') }}"></script>
+<script src="{{ asset('frontend/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('frontend/js/contact.js') }}"></script>
+<script src="{{ asset('frontend/js/main.js') }}"></script>
+<script src="{{ asset('frontend/js/custom.js') }}"></script>
+<script src="{{ asset('frontend/js/sweetalert.min.js') }}"></script>
+<script src="{{ asset('frontend/js/alertify.min.js') }}"></script>
+<script src="{{ asset('frontend/js/jqBootstrapValidation.min.js') }}"></script>
 
 
 {{-- ---------------------------------------}}

@@ -4,9 +4,9 @@
   <span><span class="screen-reader-text">0</span></span>
   <span>4</span><br>
   <span style="font-size: 50px">
-{{--      @if(isset($error))--}}
-{{--          <p>{{ $error }}</p>--}}
-{{--      @endif--}}
+      @if(isset($error))
+          <p>{{ $error }}</p>
+      @endif
       <a style="color: rgb(248, 250, 152); " href="/">Quay lại trang chủ</a>
   </span>
 </section>

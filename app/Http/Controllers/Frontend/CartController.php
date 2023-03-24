@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Psy\Util\Json;
 
 class CartController extends Controller
 {
@@ -98,9 +99,11 @@ class CartController extends Controller
 
     public function viewcart()
     {
+        $categories = Category::all();
+
         $cookie_data = stripslashes(Cookie::get('shopping_cart'));
         $cart_data = json_decode($cookie_data, true);
-        return view('frontend.cart')
+        return view('frontend.cart', compact('categories'))
             ->with('cart_data',$cart_data);
     }
 
@@ -144,26 +147,28 @@ class CartController extends Controller
     {
         $prod_id = $request->input('product_id');
 
-        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-        $cart_data = json_decode($cookie_data, true);
+        $cookie_data = stripslashes(Cookie::get('shopping_cart')); //Lấy giá trị của cookie shopping_cart và gán vào biến $cookie_data. Hàm stripslashes được sử dụng để loại bỏ các ký tự backslash () được thêm vào trước các ký tự đặc biệt trong chuỗi, để tránh lỗi khi giải mã JSON.
+        $cart_data = json_decode($cookie_data, true); // Giải mã JSON từ chuỗi $cookie_data và lưu kết quả vào biến $cart_data dưới dạng mảng.
 
-        $item_id_list = array_column($cart_data, 'item_id');
+        $item_id_list = array_column($cart_data, 'item_id'); //Tạo một mảng $item_id_list chứa các giá trị của trường item_id từ mảng $cart_data.
+
         $prod_id_is_there = $prod_id;
 
-        if(in_array($prod_id_is_there, $item_id_list))
+        if(in_array($prod_id_is_there, $item_id_list)) // Kiểm tra nếu giá trị của $prod_id_is_there có trong mảng $item_id_list thì thực hiện các câu lệnh bên trong.
         {
-            foreach($cart_data as $keys => $values)
+            foreach($cart_data as $keys => $values) //Lặp qua từng phần tử của mảng $cart_data, lưu index vào biến $keys và giá trị vào biến $values.
             {
                 if($cart_data[$keys]["item_id"] == $prod_id)
                 {
-                    unset($cart_data[$keys]);
-                    $item_data = json_encode($cart_data);
-                    $minutes = 60;
-                    Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                    unset($cart_data[$keys]); //Xoá phần tử hiện tại của mảng $cart_data.
+                    $item_data = json_encode($cart_data); //Chuyển đổi mảng $cart_data thành chuỗi JSON và lưu kết quả vào biến $item_data.
+                    $minutes = 60; //Thiết lập thời gian sống của cookie shopping_cart là 60 phút.
+                    Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes)); //Tạo một cookie shopping_cart mới với giá trị là chuỗi JSON trong biến $item_data và thời gian sống là $minutes, và đưa cookie vào hàng đợi để gửi về máy khách sau khi HTTP response được gửi đi.
                     return response()->json(['status'=>'Item Removed from Cart']);
                 }
             }
         }
+
     }
 
     public function clearcart()

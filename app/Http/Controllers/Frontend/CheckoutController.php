@@ -12,27 +12,35 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        try {
-            $categories = Category::all();
-            $old_cartitems = Cart::where('user_id', Auth::id())->get();
-            foreach($old_cartitems as $item){
-                if(!Product::where('id', +$item->prod_id)->where('qty','>=', +$item->prod_qty)->exists()){
-                    $removeItem = Cart::where('user_id', Auth::id())->where('prod_id', $item->prod_id)->first();
-                    $removeItem->delete();
-                }
-            }
-            $cartitems = Cart::where('user_id', Auth::id())->get();
+        $categories = Category::all();
 
-            return view('frontend.checkout', compact('cartitems', 'categories'));
-        } catch (Exception $e) {
-            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
-        }
+        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+        $cart_data = json_decode($cookie_data, true);
+        return view('frontend.checkout', compact('categories'))
+            ->with('cart_data',$cart_data);
+
+//        try {
+//            $categories = Category::all();
+//            $old_cartitems = Cart::where('user_id', Auth::id())->get();
+//            foreach($old_cartitems as $item){
+//                if(!Product::where('id', +$item->prod_id)->where('qty','>=', +$item->prod_qty)->exists()){
+//                    $removeItem = Cart::where('user_id', Auth::id())->where('prod_id', $item->prod_id)->first();
+//                    $removeItem->delete();
+//                }
+//            }
+//            $cartitems = Cart::where('user_id', Auth::id())->get();
+//
+//            return view('frontend.checkout', compact('cartitems', 'categories'));
+//        } catch (Exception $e) {
+//            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
+//        }
     }
 
     public function placeorder(Request $request)
@@ -50,7 +58,7 @@ class CheckoutController extends Controller
                 'state'=>' required',
                 'country'=>' required',
                 'pincode'=>' required',
-    
+
             ], [
                 'fname.required' => 'Vui lòng nhập First Name',
                 'lname.required' => 'Vui lòng nhập Last Name',
@@ -62,9 +70,9 @@ class CheckoutController extends Controller
                 'state.required' => 'Vui lòng nhập State',
                 'country.required' => 'Vui lòng nhập Country',
                 'pincode.required' => 'Vui lòng nhập Pincode',
-    
+
             ]);
-             
+
             if ($validator->fails()) {
                 return redirect('checkout')->withErrors($validator)->withInput();
             }else{
@@ -80,41 +88,49 @@ class CheckoutController extends Controller
                 $order->state = $request->input('state');
                 $order->country = $request->input('country');
                 $order->pincode = $request->input('pincode');
-    
+
                 $order->payment_mode = $request->input('payment_mode');
                 $order->payment_id = $request->input('payment_id');
-    
+
+                if ($request->input('payment_mode') == "Paid by Paypal"){
+                    $order->status = 1;
+                }
                 //Tính tổng giá
                 $total = 0;
-                $cartitems_total = Cart::where('user_id', Auth::id())->get();
-                foreach($cartitems_total as $prod)
+                $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+                $cart_data = json_decode($cookie_data, true);
+                $total_in_cart = $cart_data;
+                foreach($total_in_cart as $prod)
                 {
-                    $total +=$prod->products->selling_price * $prod->prod_qty;
+                    $total += $prod['item_price'] * $prod['item_quantity'];
                 }
-    
+
                 $order->total_price = $total;
-    
+
                 $order->tracking_no = 'DVT'.rand(1111,9999);
                 $order->save();
-    
-                $cartitems = Cart::where('user_id', Auth::id())->get();
-                foreach($cartitems as $item){
-    
+
+                $items_in_cart = $cart_data;
+
+                foreach($items_in_cart as $item){
+
+                    $products = Product::find($item['item_id']);
+                    $prod_price = $products->selling_price;
                     OrderItem::create([
                         'order_id' => $order->id,
-                        'prod_id' => $item->prod_id,
-                        'qty' => $item->prod_qty,
-                        'price' => $item->products->selling_price,
-    
+                        'prod_id' => $item['item_id'],
+                        'qty' => $item['item_quantity'],
+                        'price' => $prod_price,
+
                     ]);
-    
-                    $prod = Product::where('id', $item->prod_id)->first();
-                    $prod->qty = $prod->qty - $item->prod_qty;
+
+                    $prod = Product::where('id', $item['item_id'])->first();
+                    $prod->qty = $prod->qty - $item['item_quantity'];
                     $prod->update();
                 }
-    
+
                 if(Auth::user()->address1 == NULL){
-    
+
                     $user = User::where('id', Auth::id())->first();
                     $user->name = $request->input('name');
                     $user->lname = $request->input('lname');
@@ -127,10 +143,9 @@ class CheckoutController extends Controller
                     $user->pincode = $request->input('pincode');
                     $user->update();
                 }
-    
-                $cartitems = Cart::where('user_id', Auth::id())->get();
-                Cart::destroy($cartitems);
-    
+
+                Cookie::queue(Cookie::forget('shopping_cart'));
+
                 if ($request->input('payment_mode') == "Paid by Paypal")
                 {
                     return response()->json(['status' => "Order placed Successfully"]);
@@ -142,7 +157,7 @@ class CheckoutController extends Controller
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
         }
 
-        
+
     }
 
 }
