@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::post('add-rating', [RatingController::class, 'add']);
 
-    Route::post('add-review', [ReviewController::class, 'create'])->name('add-review');
+    Route::post('add-review', [DetailController::class, 'store'])->name('add-review');
 
 });
 
