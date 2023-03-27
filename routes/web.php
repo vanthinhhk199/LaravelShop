@@ -34,7 +34,7 @@ Route::get('/', [FrontendController::class, 'index']);
 
 Route::get('view-category/{slug}', [FrontendController::class, 'viewcategory']);
 
-Route::get('product/{id}', [DetailController::class, 'productview']);
+Route::get('product/{id}', [DetailController::class, 'show']);
 
 //Route::get('cmt.get-more-users', [ReviewController::class, 'getMorecmts']);
 
