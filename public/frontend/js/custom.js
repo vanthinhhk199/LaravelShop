@@ -217,4 +217,20 @@ $(document).ready(function () {
         });
     });
 
+    // $(document).on('click', '.pagination a',function (event) {
+    //     event.preventDefault();
+    //     var page = $(this).attr('href').split('page=')[1];
+    //     getMorecmts(page);
+    // });
+    //
+    // function getMorecmts(page) {
+    //     $.ajax({
+    //         url: "/product/{id}" + "?page=" + page,
+    //         type: "Get",
+    //         success:function (data) {
+    //             $('#cmt_data').html('');
+    //         }
+    //     });
+    // }
+
 });

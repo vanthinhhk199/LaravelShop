@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\RatingController;
 use App\Http\Controllers\Frontend\ReviewController;
 use App\Http\Controllers\Frontend\UserController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Frontend\DetailController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Route;
@@ -32,7 +33,11 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [FrontendController::class, 'index']);
 
 Route::get('view-category/{slug}', [FrontendController::class, 'viewcategory']);
-Route::get('product/{id}', [FrontendController::class, 'productview']);
+
+Route::get('product/{id}', [DetailController::class, 'productview']);
+
+//Route::get('cmt.get-more-users', [ReviewController::class, 'getMorecmts']);
+
 
 Route::get('search', [FrontendController::class, 'searchProduct']);
 

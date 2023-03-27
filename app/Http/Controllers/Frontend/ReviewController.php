@@ -39,5 +39,13 @@ class ReviewController extends Controller
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
         }
     }
+
+//    public function getMorecmts(Request $request, $prod_id) {
+//        if ($request->ajax()){
+//            $products = Product::where('id', $prod_id)->first();
+//            $reviews = Review::where('prod_id', $products->id)->orderBy('created_at', 'desc')->paginate(2);
+//            return view('pages.cmt_data', compact($reviews))->render();
+//        }
+//    }
 }
 ?>

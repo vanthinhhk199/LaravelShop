@@ -132,16 +132,13 @@
                     <div class="d-flex pt-2">
                         <strong class="text-dark mr-2">Share on:</strong>
                         <div class="d-inline-flex">
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2" href="https://www.facebook.com/profile.php?id=100004187805429">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2" href="https://twitter.com/AThunhj">
                                 <i class="fab fa-twitter"></i>
                             </a>
-                            <a class="text-dark px-2" href="">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a class="text-dark px-2" href="">
+                            <a class="text-dark px-2" href="https://www.instagram.com/thinh0501/">
                                 <i class="fab fa-pinterest"></i>
                             </a>
                         </div>
@@ -204,26 +201,28 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="mb-4">{{ $review->count() }} review for "{{ $products->name }}"</h4>
-                                    @foreach ($reviews as $item)
-                                        <div class="media mb-4">
-                                            <img src="{{ asset('assets/uploads/batman.png') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                            <div class="media-body">
-                                                <h6>{{ $item->user->name }}<small> - <i>{{ $item->created_at->format('d M Y') }}</i></small></h6>
-                                                <div class="text-primary mb-2">
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star"></i>
-                                                    <i class="fas fa-star-half-alt"></i>
-                                                    <i class="far fa-star"></i>
+                                    <div id="cmt_data">
+                                        @foreach ($reviews as $item)
+                                            <div class="media mb-4">
+                                                <img src="{{ asset('assets/uploads/batman.png') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                                <div class="media-body">
+                                                    <h6>{{ $item->user->name }}<small> - <i>{{ $item->created_at->format('d M Y') }}</i></small></h6>
+                                                    <div class="text-primary mb-2">
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star"></i>
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                        <i class="far fa-star"></i>
+                                                    </div>
+                                                    <p><p>{{ $item->user_review }}</p></p>
                                                 </div>
-                                                <p><p>{{ $item->user_review }}</p></p>
                                             </div>
-                                        </div>
-                                        <hr>
-                                    @endforeach
-                                    @if (isset($reviews) && count($reviews)> 0)
-                                        {{ $reviews->links() }}
-                                    @endif
+                                            <hr>
+                                        @endforeach
+                                        @if (isset($reviews) && count($reviews)> 0)
+                                            {{ $reviews->links() }}
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>

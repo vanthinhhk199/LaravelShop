@@ -45,10 +45,10 @@
                     </form>
                     <h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
                     <div class="d-flex">
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://twitter.com/AThunhj"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://www.facebook.com/profile.php?id=100004187805429"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-primary btn-square mr-2" href="https://www.instagram.com/thinh0501/"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-primary btn-square" href="tel: +84905869960"><i class="fas fa-phone"></i></a>
                     </div>
                 </div>
             </div>

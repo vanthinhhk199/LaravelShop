@@ -21,7 +21,7 @@ class FrontendController extends Controller
             $featured_products = Product::where('trending', '1')
             ->leftjoin('ratings', 'products.id', '=', 'ratings.prod_id')
             ->orderBy('products.id')
-            ->paginate(8);
+            ->paginate(4);
             $products = array();
             $idProduct = '';
             $product = null;
@@ -81,7 +81,7 @@ class FrontendController extends Controller
             }
 
             return view('frontend.index', compact('featured_products', 'categories'));
-            
+
         } catch (\Exception $e) {
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
         }
@@ -95,38 +95,10 @@ class FrontendController extends Controller
                 $categories = Category::all();
                 $category = Category::where('id',$id)->first();
                 $products = Product::where('cate_id', $category->id)->where('status','0')->get();
-    
+
                 return view('frontend.products.index', compact('category','products', 'categories'));
             }else {
                 return redirect('/')->with('status',"Slug doesnot exists");
-            }
-        } catch (\Exception $e) {
-            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function productview($prod_id)
-    {
-        try {
-            if (Product::where('id', $prod_id)->exists())
-            {
-                $categories = Category::all();
-                $product = Product::all();
-                $products = Product::where('id', $prod_id)->first();
-                $ratings = Rating::where('prod_id', $products->id)->get();
-                $rating_sum = Rating::where('prod_id', $products->id)->sum('stars_rated');
-                $user_rating = Rating::where('prod_id', $products->id)->where('user_id', Auth::id())->first();
-                $reviews = Review::where('prod_id', $products->id)->orderBy('created_at', 'desc')->paginate(2);
-                $review = Review::all();
-                if ($ratings->count() > 0) {
-    
-                    $rating_value = $rating_sum/$ratings->count();
-                }else{
-                    $rating_value = 0;
-                }
-                return view('frontend.products.view', compact('products', 'categories', 'product', 'ratings', 'rating_value', 'user_rating', 'reviews', 'review'));
-            }else{
-                return redirect('/')->with('status', 'Liên kết đã bị hỏng');
             }
         } catch (\Exception $e) {
             return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
@@ -140,7 +112,7 @@ class FrontendController extends Controller
                 $categories = Category::all();
                 $searchProduct = Product::where("name","LIKE","%$request->search%")->latest()->paginate(8);
                 foreach ($searchProduct as $prod) {
-    
+
                     $ratings = Rating::where('prod_id', $prod->id)->get();
                     $rating_sum = Rating::where('prod_id', $prod->id)->sum('stars_rated');
                     if ($ratings->count() != 0) {

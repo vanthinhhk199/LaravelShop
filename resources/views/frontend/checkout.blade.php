@@ -192,48 +192,7 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AYxavrHdCLYLVUC6USfORhzyxE4KdzDrwa7Udf7vAfextpmVTK0UP1-4ToyKVDvB509M4A3rfxIOlj0w"></script>
 
     <script>
-
-        paypal.Buttons({
-        createOrder: function(data, actions) {
-
-            var lastName = document.querySelector('input[name="lname"]').value;
-            var firstName = document.querySelector('input[name="fname"]').value;
-            var address1 = document.querySelector('input[name="address1"]').value;
-            var state = document.querySelector('input[name="state"]').value;
-            var pincode = document.querySelector('input[name="pincode"]').value;
-
-
-
-
-            // This function sets up the details of the transaction, including the amount and line item details.
-            return actions.order.create({
-                purchase_units: [
-                    {
-                        amount: {
-                            currency_code: "USD",
-                            value: '{{ $total }}'
-                        },
-                        shipping: {
-                            name: {
-                                full_name: firstName + ' ' + lastName
-                            },
-                            address: {
-                                address_line_1: address1,
-                                postal_code: pincode,
-                                admin_area_2: state,
-                                country_code: "VN",
-                            }
-                        }
-                    }
-                ]
-            });
-        },
-        onApprove: function(data, actions) {
-            // This function captures the funds from the transaction.
-            return actions.order.capture().then(function(details) {
-            // This function shows a transaction success message to your buyer.
-            // alert('Transaction completed by ' + details.payer.name.given_name);
-
+        function validateForm() {
             var firstname = $('.firstname').val();
             var lastname = $('.lastname').val();
             var email = $('.email').val();
@@ -254,9 +213,9 @@
                 $('#fname_error').html('');
             }
             if (!lastname) {
-                lastname_error = "lastname is required";
-                $('#lastname_error').html('');
-                $('#lastname_error').html(lastname_error);
+                lname_error = "lastname is required";
+                $('#lname_error').html('');
+                $('#lname_error').html(lname_error);
             }else{
                 lastname_error = "";
                 $('#lastname_error').html('');
@@ -328,39 +287,93 @@
 
             if (fname_error != '' || lastname_error != '' || email_error != '' || phone_error != '' || address1_error != '' || address2_error != '' || city_error != '' || state_error != '' || country_error != '' || pincode_error != '') {
                 return false;
-            }else{
-                $.ajax({
-                    method: "POST",
-                    url: "/place-order",
-                    data: {
-                        'fname':firstname,
-                        'lname':lastname,
-                        'email':email,
-                        'phone':phone,
-                        'address1':address1,
-                        'address2':address2,
-                        'city':city,
-                        'state':state,
-                        'country':country,
-                        'pincode':pincode,
-                        'payment_mode':"Paid by Paypal",
-                        'payment_id':details.id,
+            }
+            return true;
+        }
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                if (!validateForm()) {
+                    return false;
+                }
 
-                    },
-                    success: function (response) {
-                        swal("", response.status, "success")
-                        .then((value) => {
-                            window.location.href = "/my-orders";
-                        });
-                    }
+                var lastName = document.querySelector('input[name="lname"]').value;
+                var firstName = document.querySelector('input[name="fname"]').value;
+                var address1 = document.querySelector('input[name="address1"]').value;
+                var state = document.querySelector('input[name="state"]').value;
+                var pincode = document.querySelector('input[name="pincode"]').value;
+
+                // This function sets up the details of the transaction, including the amount and line item details.
+                return actions.order.create({
+                    purchase_units: [
+                        {
+                            amount: {
+                                currency_code: "USD",
+                                value: '{{ $total }}'
+                            },
+                            shipping: {
+                                name: {
+                                    full_name: firstName + ' ' + lastName
+                                },
+                                address: {
+                                    address_line_1: address1,
+                                    postal_code: pincode,
+                                    admin_area_2: state,
+                                    country_code: "VN",
+                                }
+                            }
+                        }
+                    ]
+                });
+            },
+            onApprove: function(data, actions) {
+                if (!validateForm()) {
+                    return false;
+                }
+                // This function captures the funds from the transaction.
+                return actions.order.capture().then(function(details) {
+                // This function shows a transaction success message to your buyer.
+                // alert('Transaction completed by ' + details.payer.name.given_name);
+
+                    var firstname = $('.firstname').val();
+                    var lastname = $('.lastname').val();
+                    var email = $('.email').val();
+                    var phone = $('.phone').val();
+                    var address1 = $('.address1').val();
+                    var address2 = $('.address2').val();
+                    var city = $('.city').val();
+                    var state = $('.state').val();
+                    var country = $('.country').val();
+                    var pincode = $('.pincode').val();
+
+                    $.ajax({
+                        method: "POST",
+                        url: "/place-order",
+                        data: {
+                            'fname':firstname,
+                            'lname':lastname,
+                            'email':email,
+                            'phone':phone,
+                            'address1':address1,
+                            'address2':address2,
+                            'city':city,
+                            'state':state,
+                            'country':country,
+                            'pincode':pincode,
+                            'payment_mode':"Paid by Paypal",
+                            'payment_id':details.id,
+
+                        },
+                        success: function (response) {
+                            swal("", response.status, "success")
+                            .then((value) => {
+                                window.location.href = "/my-orders";
+                            });
+                        }
+                    });
                 });
             }
-
-            });
-        }
         }).render('#paypal-button-container');
         //This function displays payment buttons on your web page.
-
     </script>
 
 @endsection
