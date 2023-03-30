@@ -201,28 +201,28 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="mb-4">{{ $review->count() }} review for "{{ $products->name }}"</h4>
-                                    <div id="cmt_data">
-                                        @foreach ($reviews as $item)
-                                            <div class="media mb-4">
-                                                <img src="{{ asset('assets/uploads/batman.png') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                                <div class="media-body">
-                                                    <h6>{{ $item->user->name }}<small> - <i>{{ $item->created_at->format('d M Y') }}</i></small></h6>
-                                                    <div class="text-primary mb-2">
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star"></i>
-                                                        <i class="fas fa-star-half-alt"></i>
-                                                        <i class="far fa-star"></i>
-                                                    </div>
-                                                    <p><p>{{ $item->user_review }}</p></p>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                        @endforeach
-                                        @if (isset($reviews) && count($reviews)> 0)
-                                            {{ $reviews->links() }}
-                                        @endif
-                                    </div>
+                                    <div id="table-cmt"></div>
+                                    <input type="hidden" id="product_id" name="product_id" value="{{ $products->id }}">
+{{--                                    @foreach ($reviews as $item)--}}
+{{--                                        <div class="media mb-4">--}}
+{{--                                            <img src="{{ asset('assets/uploads/batman.png') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">--}}
+{{--                                            <div class="media-body">--}}
+{{--                                                <h6>{{ $item->user->name }}<small> - <i>{{ $item->created_at->format('d M Y') }}</i></small></h6>--}}
+{{--                                                <div class="text-primary mb-2">--}}
+{{--                                                    <i class="fas fa-star"></i>--}}
+{{--                                                    <i class="fas fa-star"></i>--}}
+{{--                                                    <i class="fas fa-star"></i>--}}
+{{--                                                    <i class="fas fa-star-half-alt"></i>--}}
+{{--                                                    <i class="far fa-star"></i>--}}
+{{--                                                </div>--}}
+{{--                                                <p><p>{{ $item->user_review }}</p></p>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <hr>--}}
+{{--                                    @endforeach--}}
+{{--                                    @if (isset($reviews) && count($reviews)> 0)--}}
+{{--                                        {{ $reviews->links() }}--}}
+{{--                                    @endif--}}
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>

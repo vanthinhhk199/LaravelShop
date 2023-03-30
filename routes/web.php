@@ -36,8 +36,10 @@ Route::get('view-category/{slug}', [FrontendController::class, 'viewcategory']);
 
 Route::get('product/{id}', [DetailController::class, 'show']);
 
-//Route::get('cmt.get-more-users', [ReviewController::class, 'getMorecmts']);
+Route::post('load_more_cmt/{prod_id}', [DetailController::class, 'load_more_cmt']);
 
+
+Route::get('pagination/paginate-prod', [FrontendController::class, 'pagination']);
 
 Route::get('search', [FrontendController::class, 'searchProduct']);
 

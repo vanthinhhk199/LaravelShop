@@ -65,12 +65,58 @@ class DetailController extends Controller
         }
     }
 
-//    public function getMorecmts(Request $request, $prod_id) {
-//        if ($request->ajax()){
-//            $products = Product::where('id', $prod_id)->first();
-//            $reviews = Review::where('prod_id', $products->id)->orderBy('created_at', 'desc')->paginate(2);
-//            return view('pages.cmt_data', compact($reviews))->render();
-//        }
-//    }
+    public function load_more_cmt(Request $request, $prod_id){
+
+        $data = $request->all();
+
+        $products = Product::where('id', $prod_id)->first();
+
+        if ($data['id']>0){
+            $reviews = Review::where('prod_id', $products->id)
+                ->where('id','<',$data['id'])
+                ->orderBy('created_at', 'desc')
+                ->take(6)
+                ->get();
+        }else{
+            $reviews = Review::where('prod_id', $products->id)
+                ->orderBy('created_at', 'desc')
+                ->take(6)
+                ->get();
+        }
+
+        $output = '';
+        if (!$reviews->isEmpty()){
+            foreach($reviews as $key =>$rev){
+                $last_id = $rev->id;
+                $output.='<div class="media mb-4">
+                            <img src="'.url('public/assets/uploads/batman.png').'" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                            <div class="media-body">
+                                <h6>'.$rev->user->name.'<small> - <i>'.$rev->created_at->format('d M Y').'</i></small></h6>
+                                <div class="text-primary mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <p><p>'.$rev->user_review.'</p></p>
+                            </div>
+                        </div>';
+            }
+            $output .= '
+                <div id="load_more">
+                    <button type="button" name="load_more_button" class="btn btn-primary form-control" data-id="'.$last_id.'" id="load_more_button">Tải Thêm</button>
+                </div>
+            ';
+        }else{
+            $output .= '
+                <div id="load_more">
+                    <button type="button" name="load_more_button" class="btn btn-primary form-control">Dữ liệu đang cập nhật thêm...</button>
+                </div>
+            ';
+        }
+        echo $output;
+    }
+
 
 }
