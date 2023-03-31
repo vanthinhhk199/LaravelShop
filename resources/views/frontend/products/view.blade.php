@@ -199,30 +199,10 @@
                         </div>
                         <div class="tab-pane fade  show active" id="tab-pane-3">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 of-scrol scrollbar test">
                                     <h4 class="mb-4">{{ $review->count() }} review for "{{ $products->name }}"</h4>
                                     <div id="table-cmt"></div>
                                     <input type="hidden" id="product_id" name="product_id" value="{{ $products->id }}">
-{{--                                    @foreach ($reviews as $item)--}}
-{{--                                        <div class="media mb-4">--}}
-{{--                                            <img src="{{ asset('assets/uploads/batman.png') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">--}}
-{{--                                            <div class="media-body">--}}
-{{--                                                <h6>{{ $item->user->name }}<small> - <i>{{ $item->created_at->format('d M Y') }}</i></small></h6>--}}
-{{--                                                <div class="text-primary mb-2">--}}
-{{--                                                    <i class="fas fa-star"></i>--}}
-{{--                                                    <i class="fas fa-star"></i>--}}
-{{--                                                    <i class="fas fa-star"></i>--}}
-{{--                                                    <i class="fas fa-star-half-alt"></i>--}}
-{{--                                                    <i class="far fa-star"></i>--}}
-{{--                                                </div>--}}
-{{--                                                <p><p>{{ $item->user_review }}</p></p>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                        <hr>--}}
-{{--                                    @endforeach--}}
-{{--                                    @if (isset($reviews) && count($reviews)> 0)--}}
-{{--                                        {{ $reviews->links() }}--}}
-{{--                                    @endif--}}
                                 </div>
                                 <div class="col-md-6">
                                     <h4 class="mb-4">Leave a review</h4>
@@ -239,13 +219,15 @@
                                     </div>
                                     <form action="{{ url('add-review') }}" method="POST">
                                         @csrf
-                                        <input type="hidden" name="prod_id" id="prod_id" value="{{ $products->id }}">
-                                        <div class="form-group">
-                                            <label for="message">Your Review *</label>
-                                            <textarea id="user_review" name="user_review" cols="30" rows="5" class="form-control"></textarea>
-                                        </div>
-                                        <div class="form-group mb-0">
-                                            <button type="submit" class="btn btn-primary px-3">Gửi</button>
+                                        <div class="cmt_data">
+                                            <input type="hidden" class="prod_id" name="prod_id" id="prod_id" value="{{ $products->id }}">
+                                            <div class="form-group">
+                                                <label for="message">Your Review *</label>
+                                                <textarea id="user_review" name="user_review" cols="30" rows="5" class="form-control user_review"></textarea>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <button type="submit" class="btn btn-primary px-3 add-review-btn">Gửi</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -290,4 +272,8 @@
     </div>
     <!-- Products End -->
 
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('frontend/js/details.product.js') }}"></script>
 @endsection

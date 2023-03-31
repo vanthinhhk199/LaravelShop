@@ -38,7 +38,6 @@ Route::get('product/{id}', [DetailController::class, 'show']);
 
 Route::post('load_more_cmt/{prod_id}', [DetailController::class, 'load_more_cmt']);
 
-
 Route::get('pagination/paginate-prod', [FrontendController::class, 'pagination']);
 
 Route::get('search', [FrontendController::class, 'searchProduct']);
