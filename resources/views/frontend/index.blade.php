@@ -9,7 +9,7 @@
 
     <!-- Categories Start -->
     <div class="container-fluid pt-5">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">DANH MỤC</span></h2>
         <div class="row px-xl-5 pb-3">
             @foreach ($categories as $cate)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
@@ -32,7 +32,28 @@
 
     <!-- Products Start -->
     <div class="container-fluid pt-5 pb-3">
-        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Featured Products</span></h2>
+        <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">SẢN PHẨM</span></h2>
+            <div class="d-flex form-filter">
+                <div class="px-xl-5 d-flex">
+                    <label class="form-filter-lable mr-2" for="price_range">Giá:</label>
+                    <select class="form-filter-select" name="sort-price" id="sort_price">
+                        <option value="all">Tất cả giá</option>
+                        <option value="0-500">Dưới 500</option>
+                        <option value="500-1000">Từ 500-1000</option>
+                        <option value="1000-2000">Từ 1000-2000</option>
+                        <option value="2000-5000">Từ 2000-5000</option>
+                        <option value="20000-">Trên 20000</option>
+                    </select>
+                </div>
+                <div class=" d-flex">
+                    <label class="form-filter-lable mr-2" for="brand">Hãng:</label>
+                    <select class="form-filter-select" name="sort_by" id="sort_by">
+                        <option value="">Sắp Xếp</option>
+                        <option value="decrease">Giá giảm dần</option>
+                        <option value="ascending">Giá tăng dần</option>
+                    </select>
+                </div>
+            </div>
         <div class="table-prod">
             <div class="row px-xl-5">
                 @foreach ($featured_products as $prod)
@@ -54,13 +75,6 @@
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-center mb-1">
-                                    {{-- <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small>(99)</small> --}}
-
                                     @php $ratenum = number_format($prod->rating_SVG) @endphp
                                     <div class="rating">
 
@@ -99,4 +113,21 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).on('change', function () {
+            let sort_by = $('#sort_by').val();
+            let sort_price = $('#sort_price').val();
+            $.ajax({
+                url: "{{ route('sort.by') }}",
+                method: "GET",
+                data: {sort_by: sort_by, sort_price: sort_price},
+                success:function (res) {
+                    $('.table-prod').html(res);
+                }
+            })
+        })
+    </script>
 @endsection

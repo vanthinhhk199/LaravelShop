@@ -56,6 +56,9 @@ Route::get('cart', [CartController::class, 'viewcart']);
 
 Route::get('clear-cart',[CartController::class, 'clearcart']);
 
+Route::get('/sort-by',[FrontendController::class, 'sort_by'])->name('sort.by');
+
+
 Route::middleware(['auth'])->group(function(){
     Route::get('checkout', [CheckoutController::class, 'index']);
     Route::post('place-order', [CheckoutController::class, 'placeorder']);
