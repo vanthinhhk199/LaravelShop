@@ -8,6 +8,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-md-12">
+                {{ $orders->links() }}
                 <div class="card">
                     <div class="card-header bg-primary">
                         <h4 class="text-black">My Orders</h4>
@@ -35,6 +36,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>

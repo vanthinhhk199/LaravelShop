@@ -25,22 +25,6 @@ class CheckoutController extends Controller
         $cart_data = json_decode($cookie_data, true);
         return view('frontend.checkout', compact('categories'))
             ->with('cart_data',$cart_data);
-
-//        try {
-//            $categories = Category::all();
-//            $old_cartitems = Cart::where('user_id', Auth::id())->get();
-//            foreach($old_cartitems as $item){
-//                if(!Product::where('id', +$item->prod_id)->where('qty','>=', +$item->prod_qty)->exists()){
-//                    $removeItem = Cart::where('user_id', Auth::id())->where('prod_id', $item->prod_id)->first();
-//                    $removeItem->delete();
-//                }
-//            }
-//            $cartitems = Cart::where('user_id', Auth::id())->get();
-//
-//            return view('frontend.checkout', compact('cartitems', 'categories'));
-//        } catch (Exception $e) {
-//            return response()->view('layouts.404', ['error' => $e->getMessage()], 500);
-//        }
     }
 
     public function placeorder(Request $request)
@@ -125,14 +109,39 @@ class CheckoutController extends Controller
                     ]);
 
                     $prod = Product::where('id', $item['item_id'])->first();
-                    $prod->qty = $prod->qty - $item['item_quantity'];
-                    $prod->update();
+                    if ($prod->qty >= $item['item_quantity']) {
+                        $prod->qty = $prod->qty - $item['item_quantity'];
+                        $prod->update();
+                    } else {
+
+                        //lấy ra tên sản phẩm và xoá nó khỏi cookie cart
+                        $id_prod = $item['item_id'];
+                        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+                        $shopping_cart = json_decode($cookie_data, true);
+                        $name_prod = '';
+
+                        foreach ($shopping_cart as $item) {
+                            if ($item['item_id'] == $id_prod) {
+                                $name_prod = $item['item_name'];
+                                break;
+                            }
+                        }
+
+                        foreach($items_in_cart as $key => $item_prod) {
+                            if ($item_prod['item_id'] == $id_prod) {
+                                unset($items_in_cart[$key]);
+                                Cookie::queue(Cookie::make('shopping_cart', json_encode($items_in_cart), 60)); //sau khi xoá cập nhật lại cart
+                            }
+                        }
+                        //End
+
+                        return redirect('/cart')->with('status_er', "Sản phẩm $name_prod đã hết hàng");
+                    }
                 }
 
                 if(Auth::user()->address1 == NULL){
 
                     $user = User::where('id', Auth::id())->first();
-                    $user->name = $request->input('name');
                     $user->lname = $request->input('lname');
                     $user->phone = $request->input('phone');
                     $user->address1 = $request->input('address1');

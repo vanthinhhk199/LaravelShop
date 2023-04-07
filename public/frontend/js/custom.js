@@ -202,7 +202,7 @@ $(document).ready(function () {
         var prod_id = $(this).closest('.product_data').find('.prod_id').val();
 
         $.ajax({
-            method: "POST",
+            method: "DELETE",
             url: "/remove-wishlist-item",
             data: {
                 'prod_id':prod_id,
@@ -217,19 +217,5 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.pagination a',function (e) {
-        e.preventDefault();
-        let page = $(this).attr('href').split('page=')[1];
-        pproduct(page);
-    });
-
-    function pproduct(page) {
-        $.ajax({
-            url: "/pagination/paginate-prod?page=" + page,
-            success:function (res) {
-                $('.table-prod').html(res);
-            }
-        });
-    }
 
 });

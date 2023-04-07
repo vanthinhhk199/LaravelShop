@@ -13,7 +13,7 @@
         <div class="row px-xl-5 pb-3">
             @foreach ($categories as $cate)
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                    <a class="text-decoration-none" href="{{ url('view-category/'.$cate->id) }}">
+                    <a class="text-decoration-none" href="{{ url('view-category/'.$cate->slug) }}">
                         <div class="cat-item d-flex align-items-center mb-4">
                             <div class="overflow-hidden" style="width: 100px; height: 100px;">
                                 <img class="img-fluid" src="{{ asset('assets/uploads/category/'.$cate->image) }}" alt="">
@@ -60,13 +60,15 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                         <div class="product-item bg-light mb-4">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100 img-prod" src="{{ asset('assets/uploads/products/'.$prod->image) }}" alt="Product image">
-                                <div class="product-action">
-                                    {{-- <a class="btn btn-outline-dark btn-square" href="{{ url('cart') }}"><i class="fa fa-shopping-cart"></i></a> --}}
-                                    <a class="btn btn-outline-dark btn-square" href="{{ url('product/'.$prod->id) }}"><i class="fa fa-search"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                </div>
+                                <a href="{{ url('product/'.$prod->id) }}">
+                                    <img class="img-fluid w-100 img-prod" src="{{ asset('assets/uploads/products/'.$prod->image) }}" alt="Product image">
+                                </a>
+{{--                                <div class="product-action">--}}
+{{--                                     <a class="btn btn-outline-dark btn-square" href="{{ url('cart') }}"><i class="fa fa-shopping-cart"></i></a>--}}
+{{--                                    <a class="btn btn-outline-dark btn-square" href="{{ url('product/'.$prod->id) }}"><i class="fa fa-search"></i></a>--}}
+{{--                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>--}}
+{{--                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>--}}
+{{--                                </div>--}}
                             </div>
                             <div class="text-center py-4">
                                 <a class="h6 text-decoration-none text-truncate" href="{{ url('product/'.$prod->id) }}">{{ $prod->name }}</a>
@@ -116,18 +118,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).on('change', function () {
-            let sort_by = $('#sort_by').val();
-            let sort_price = $('#sort_price').val();
-            $.ajax({
-                url: "{{ route('sort.by') }}",
-                method: "GET",
-                data: {sort_by: sort_by, sort_price: sort_price},
-                success:function (res) {
-                    $('.table-prod').html(res);
-                }
-            })
-        })
-    </script>
+    <script src="{{ asset('frontend/js/pagination.js') }}"></script>
 @endsection

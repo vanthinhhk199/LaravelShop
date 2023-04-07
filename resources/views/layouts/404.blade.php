@@ -7,7 +7,7 @@
       @if(isset($error))
           <p>{{ $error }}</p>
       @endif
-      <a style="color: rgb(248, 250, 152); " href="/">Quay lại trang chủ</a>
+{{--      <a style="color: rgb(248, 250, 152); " href="/">Quay lại trang chủ</a>--}}
   </span>
 </section>
 <style>

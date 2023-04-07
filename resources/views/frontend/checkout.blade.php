@@ -176,7 +176,7 @@
                         <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Payment</span></h5>
                         <div class="bg-light p-30">
                             <input type="hidden" name="payment_mode" value="COD">
-                            <button type="submit" class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
+                            <button type="submit" class="btn btn-block btn-primary font-weight-bold py-3 place-order">Place Order</button>
                             <div id="paypal-button-container" class="py-2"></div>
                         </div>
                     </div>

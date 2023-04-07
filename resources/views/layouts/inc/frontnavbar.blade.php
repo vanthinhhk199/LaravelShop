@@ -153,7 +153,7 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
                         @foreach ($categories as $cate)
-                            <a href="{{ url('view-category/'.$cate->id) }}" class="nav-item nav-link">{{ $cate->name }}</a>
+                            <a href="{{ url('view-category/'.$cate->slug) }}" class="nav-item nav-link">{{ $cate->name }}</a>
                         @endforeach
                 </div>
             </nav>

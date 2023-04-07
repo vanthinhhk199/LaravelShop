@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         try {
             $categories = Category::all();
-            $orders = Order::where('user_id', Auth::id())->get();
+            $orders = Order::where('user_id', Auth::id())->paginate(8);
             return view('frontend.orders.index', compact('orders','categories'));
 
         } catch (\Exception $e) {

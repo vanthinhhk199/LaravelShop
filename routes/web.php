@@ -14,6 +14,7 @@ use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Frontend\DetailController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\Cart;
+use App\Http\Controllers\Frontend\SearchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [FrontendController::class, 'index']);
+
 
 Route::get('view-category/{slug}', [FrontendController::class, 'viewcategory']);
 
@@ -40,7 +41,7 @@ Route::post('load_more_cmt/{prod_id}', [DetailController::class, 'load_more_cmt'
 
 Route::get('pagination/paginate-prod', [FrontendController::class, 'pagination']);
 
-Route::get('search', [FrontendController::class, 'searchProduct']);
+Route::get('search', [SearchController::class, 'searchProduct']);
 
 Route::get('load-cart-data', [CartController::class, 'cartloadbyajax']);
 Route::get('load-wishlist-count', [WishlistController::class, 'wishlistcount']);
@@ -102,11 +103,16 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
 
 
 });
+Route::get('/', [FrontendController::class, 'index']);
 
 //kiểm tra tài khoản đã xác minh chưa
 Auth::routes(['verify' => true]);
 Route::middleware(['verified'])->group(function(){
+    Route::get('/login', [LoginController::class, 'authenticated']);
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+});
+
+Route::group(['middleware' => ['auth', 'verified']], function () {
 });
 
 ?>
